@@ -1,0 +1,129 @@
+<div class="main-content project">
+
+    <div class="box ">
+        <div class="box-header  pt-0">
+            <div class="me-auto">
+                <h4 class="card-title mb-0 fs-22">{{title}}</h4>
+            </div>
+            <div class="list-action">
+                <a href="#" class="add" data-toggle="modal" data-target="#add_client">Yangi guruh<i
+                        class="fas fa-plus-circle"></i></a>
+            </div>
+        </div>
+        <div class="box-body pb-0 table-responsive activity mt-18">
+            <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer mw-100" id="task-profile"
+                role="grid">
+                <thead>
+                    <tr class="top">
+                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile"
+                            rowspan="1" colspan="1" style="width: 222.312px;">Guruh nomi</th>
+                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile"
+                            rowspan="1" colspan="1" style="width: 110.719px;">Guruh holati</th>
+                        <th class="border-bottom-0 sorting_disabled fs-14 font-w500" rowspan="1" colspan="1"
+                            style="width: 145.391px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each teams}}
+                    <tr class="odd">
+                        <td>
+                            <a href="#" class="d-flex "><span>{{name}}</span></a>
+                        </td>
+                        <td>{{{status}}}</td>
+                        <td>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" onclick="return confirm('Qaroringiz aniqmi?')" 
+                                     href="/team/delete/{{_id}}"><i class="bx bx-trash"></i>O'chirish
+                                    </a>
+                                    <a class="dropdown-item" onclick="edit('{{_id}}')" href="#" data-toggle="modal" data-target="#up_client">
+                                        <i class="bx bx-edit mr-5"></i>Tahrirlash
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="add_client" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Yangi Guruh</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="/team" method="post">
+                    <div class="form-group">
+                        <label>Guruh nomi</label>
+                        <input type="text" name="name" class="form-control" value="">
+                    </div>
+                    <div class="box-info-messager">
+                        <div class="checkbox">
+                            <input type="checkbox" name="status" value="1" checked="">
+                            <span class="ml-10">Faol</span>
+                        </div>  
+                    </div>
+
+                    <div class="submit-section text-center">
+                        <button class="btn btn-primary submit-btn">Qo'shish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="up_client" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Guruhni tahrirlash</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="/team/save" method="post" name="editform">
+                    <input type="hidden" name="_id">
+                    <div class="form-group">
+                        <label>Guruh nomi</label>
+                        <input type="text" name="name" class="form-control" value="">
+                    </div>
+                    <div class="box-info-messager">
+                        <div class="checkbox">
+                            <input type="checkbox" name="status" value="1" checked="">
+                            <span class="ml-10">Faol</span>
+                        </div>  
+                    </div>
+
+                    <div class="submit-section text-center">
+                        <button class="btn btn-primary submit-btn">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function edit(id){
+        let form = document.forms.editform
+        fetch(`/team/get/${id}`)
+        .then(res => res.json())
+        .then(team =>{
+            form._id.value = team._id                                 
+            form.name.value = team.name                                 
+            form.status.checked = team.status == 1 ? true : false                     
+        })
+    }
+
+</script>
